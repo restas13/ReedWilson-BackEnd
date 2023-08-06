@@ -11,6 +11,7 @@ Category.init(
             required: true,
             primaryKey: true,
             allowNull: false,
+            autoIncrement: true,
         },
         name: {
             type: DataTypes.STRING,
@@ -21,6 +22,7 @@ Category.init(
         sequelize,
         timestamps: false,
         underscored: true,
+        freezeTableName: true,
         modelName:'categories',
     }
 );
