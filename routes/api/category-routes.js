@@ -12,6 +12,7 @@ router.post('/', (req, res) => {
 
 // Put route for editing a category
 router.put('/:id', (req, res) => {
+    console.log(req.body);
     Categories.update(req.body, {
         where: {
             id: req.params.id,

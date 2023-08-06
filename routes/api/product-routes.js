@@ -5,6 +5,7 @@ const { Products, Categories, Tags, ProductTags } = require('../../models');
 
 // Creates a new product using the request body
 router.post('/', (req, res) => {
+    console.log(req.body);
     Products.create(req.body)
         .then((product) => {
 
@@ -29,6 +30,7 @@ router.post('/', (req, res) => {
 
 // Used for updating a product
 router.put('/:id', (req, res) => {
+    console.log(req.body);
     Products.update(req.body, {
         where: {
             id: req.params.id,
@@ -64,6 +66,7 @@ router.put('/:id', (req, res) => {
             return res.json(product);
         })
         .catch((error) => {
+            console.log('put failed');
             res.status(400).json(error);
         });
 });
