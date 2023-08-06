@@ -1,10 +1,10 @@
 //importing the router and the models needed for the route
 const router = require('express').Router();
-const { Category, Product } = require('../../models');
+const { Categories, Products } = require('../../models');
 
 //Post route for adding a category
 router.post('/', (req, res) => {
-    Category.create(req.body)
+    Categories.create(req.body)
     //returning the categories if they af=re found, and reeturning an error if there is an error or there is no db/table
         .then((category) => res.status(200).json(category))
         .catch((err) => res.status(400).json(err));
@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
 
 // Put route for editing a category
 router.put('/:id', (req, res) => {
-    Category.update(req.body, {
+    Categories.update(req.body, {
         where: {
             id: req.params.id,
         },
@@ -24,8 +24,8 @@ router.put('/:id', (req, res) => {
 
 // Get route gets all categories
 router.get('/', (req, res) => {
-    Category.findAll({
-        include: [Product],
+    Categories.findAll({
+        include: [Products],
     })
     // returning the categories if they af=re found, and reeturning an error if there is an error or there is no db/table
         .then((categories) => res.json(categories))
@@ -34,11 +34,11 @@ router.get('/', (req, res) => {
 
 // Get route for specific category (found by id)
 router.get('/:id', (req, res) => {
-    Category.findOne({
+    Categories.findOne({
         where: {
             id: req.params.id,
         },
-        include: [Product],
+        include: [Products],
     })
     //returning the categories if they af=re found, and reeturning an error if there is an error or there is no db/table
         .then((category) => res.json(category))
@@ -48,7 +48,7 @@ router.get('/:id', (req, res) => {
 
 // Delete route for getting rid of a category
 router.delete('/:id', (req, res) => {
-    Category.destroy({
+    Categories.destroy({
         where: {
             id: req.params.id,
         },

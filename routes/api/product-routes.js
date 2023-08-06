@@ -1,11 +1,11 @@
 //Imports the router and the models needed for the returning product data
 const router = require('express').Router();
-const { Product, Category, Tag, ProductTag } = require('../../models');
+const { Products, Categories, Tags, ProductTags } = require('../../models');
 
 
 // Creates a new product using the request body
 router.post('/', (req, res) => {
-    Product.create(req.body)
+    Products.create(req.body)
         .then((product) => {
 
             if (req.body.tagIds && req.body.tagIds.length) {
@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
                         tag_id,
                     };
                 });
-                return ProductTag.bulkCreate(productTagIdArr);
+                return ProductTags.bulkCreate(productTagIdArr);
             }
 
             res.status(200).json(product);
@@ -29,15 +29,14 @@ router.post('/', (req, res) => {
 
 // Used for updating a product
 router.put('/:id', (req, res) => {
-
-    Product.update(req.body, {
+    Products.update(req.body, {
         where: {
             id: req.params.id,
         },
     })
         .then((product) => {
             if (req.body.tagIds && req.body.tagIds.length) {
-                const productTags = ProductTag.findAll({
+                const productTags = ProductTags.findAll({
                     where: { product_id: req.params.id }
                 });
                 const productTagIds = productTags.map(({ tag_id }) => tag_id);
@@ -57,8 +56,8 @@ router.put('/:id', (req, res) => {
 
 
                 return Promise.all([
-                    ProductTag.destroy({ where: { id: productTagsToRemove } }),
-                    ProductTag.bulkCreate(newProductTags),
+                    ProductTags.destroy({ where: { id: productTagsToRemove } }),
+                    ProductTags.bulkCreate(newProductTags),
                 ]);
             }
 
@@ -71,12 +70,12 @@ router.put('/:id', (req, res) => {
 
 // Gets all products
 router.get('/', (req, res) => {
-    Product.findAll({
+    Products.findAll({
         include: [
-            Category,
+            Categories,
             {
-                model: Tag,
-                through: ProductTag,
+                model: Tags,
+                through: ProductTags,
             },
         ],
     })
@@ -89,15 +88,15 @@ router.get('/', (req, res) => {
 
 // Gets an individual product
 router.get('/:id', (req, res) => {
-    Product.findOne({
+    Products.findOne({
         where: {
             id: req.params.id,
         },
         include: [
-            Category,
+            Categories,
             {
-                model: Tag,
-                through: ProductTag,
+                model: Tags,
+                through: ProductTags,
             },
         ],
     })
@@ -111,7 +110,7 @@ router.get('/:id', (req, res) => {
 
 
 router.delete('/:id', (req, res) => {
-    Product.destroy({
+    Products.destroy({
         where: {
             id: req.params.id,
         },
